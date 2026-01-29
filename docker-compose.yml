@@ -1,0 +1,14 @@
+services:
+  tsdbot:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/data
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+      - DATABASE_PATH=/data/tasks.db
+      - SCHEDULER_HOUR=9
+      - SCHEDULER_MINUTE=0
+    restart: unless-stopped

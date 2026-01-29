@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Менеджер задач ТСД</title>
+
+    <!-- AG-Grid Community -->
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community@31.0.3/dist/ag-grid-community.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.0.3/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community@31.0.3/styles/ag-theme-alpine.css">
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container-fullscreen">
+        <header>
+            <h1>📋 Менеджер задач ТСД</h1>
+            <div class="actions">
+                <button id="btn-add" class="btn btn-primary">+ Задача</button>
+                <button id="btn-refresh" class="btn btn-secondary">🔄 Обновить</button>
+                <button id="btn-export" class="btn btn-secondary">📥 CSV</button>
+                <label for="csv-import" class="btn btn-secondary" style="margin: 0;">📤 Импорт
+                    <input type="file" id="csv-import" accept=".csv" style="display:none;">
+                </label>
+                <button id="btn-clear" class="btn btn-danger">🗑️ Очистить все</button>
+                <button id="btn-test-notify" class="btn btn-secondary">🔔 Тест</button>
+            </div>
+        </header>
+
+        <div id="tasks-grid" class="ag-theme-alpine grid-fullscreen"></div>
+    </div>
+
+    <!-- Модальное окно для создания задачи -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>✏️ Создать задачу</h2>
+                <span id="modal-close" class="modal-close">&times;</span>
+            </div>
+            <form id="task-form" class="modal-body">
+                <div class="form-group">
+                    <label for="номер_тсд">№ ТСД/указания:</label>
+                    <input type="text" id="номер_тсд" name="номер_тсд">
+                </div>
+                <div class="form-group">
+                    <label for="название">Наименование: *</label>
+                    <input type="text" id="название" name="название" required>
+                </div>
+                <div class="form-group">
+                    <label for="кому_представляется">Кому представляется:</label>
+                    <input type="text" id="кому_представляется" name="кому_представляется">
+                </div>
+                <div class="form-group">
+                    <label for="срок_представления">Срок представления (текст):</label>
+                    <input type="text" id="срок_представления" name="срок_представления" placeholder="например: до конца недели">
+                </div>
+                <div class="form-group">
+                    <label for="примечания">Примечания:</label>
+                    <textarea id="примечания" name="примечания" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="дата_доклада">Дата доклада: *</label>
+                    <input type="date" id="дата_доклада" name="дата_доклада" required>
+                </div>
+
+                <div class="form-divider">Настройки повтора (опционально)</div>
+
+                <div class="form-group">
+                    <label for="повтор_тип">Тип повтора:</label>
+                    <select id="повтор_тип" name="повтор_тип">
+                        <option value="none">Без повтора</option>
+                        <option value="daily">Ежедневно</option>
+                        <option value="weekly">Еженедельно</option>
+                        <option value="monthly">Ежемесячно</option>
+                        <option value="yearly">Ежегодно</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="повтор_интервал">Каждые N дней/недель/месяцев:</label>
+                    <input type="number" id="повтор_интервал" name="повтор_интервал" value="1" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="повтор_до">Повторять до даты:</label>
+                    <input type="date" id="повтор_до" name="повтор_до">
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button id="modal-cancel" class="btn btn-secondary">Отмена</button>
+                <button id="modal-save" class="btn btn-primary">Создать</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
