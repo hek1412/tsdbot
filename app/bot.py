@@ -3,25 +3,32 @@ import config
 
 
 def send_telegram_message(text):
+    """Отправляет сообщение во все указанные чаты"""
     token = config.TELEGRAM_BOT_TOKEN
-    chat_id = config.TELEGRAM_CHAT_ID
-    if not token or not chat_id:
-        print('[BOT] TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set, skipping')
+    chat_ids = config.TELEGRAM_CHAT_IDS
+
+    if not token or not chat_ids:
+        print('[BOT] TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_IDS not set, skipping')
         return False
+
     url = f'https://api.telegram.org/bot{token}/sendMessage'
-    payload = {
-        'chat_id': chat_id,
-        'text': text,
-        'parse_mode': 'HTML',
-    }
-    try:
-        resp = requests.post(url, json=payload, timeout=10)
-        resp.raise_for_status()
-        print(f'[BOT] Message sent to chat {chat_id}')
-        return True
-    except requests.RequestException as e:
-        print(f'[BOT] Failed to send message: {e}')
-        return False
+    success_count = 0
+
+    for chat_id in chat_ids:
+        payload = {
+            'chat_id': chat_id,
+            'text': text,
+            'parse_mode': 'HTML',
+        }
+        try:
+            resp = requests.post(url, json=payload, timeout=10)
+            resp.raise_for_status()
+            print(f'[BOT] Message sent to chat {chat_id}')
+            success_count += 1
+        except requests.RequestException as e:
+            print(f'[BOT] Failed to send message to chat {chat_id}: {e}')
+
+    return success_count > 0
 
 
 def format_tasks_message(tasks):
